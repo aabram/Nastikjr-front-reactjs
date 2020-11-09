@@ -1,9 +1,9 @@
-# Nastikjr-react
+# Nastikjr-front-reactjs
 
-Nastikjr-react is Nastik Jr frontend.
+Nastikjr-front-reactjs is Nastik Jr frontend.
 Nastik Jr is English-Estonian dictionary, new version of an old [service](https://nastik.palat.ee/) from 2004.
 
-Nastikjr-react is written in React and contains only frontend code to retrieve data from API backend. Database and backend written in Java is available here.
+Nastikjr-front-reactjs is written in React and contains only frontend code to retrieve data from API backend. Database and backend written in Java is available here.
 
 Demo: http://nastik.eatmorepancakes.com/
 
