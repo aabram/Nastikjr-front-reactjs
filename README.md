@@ -39,7 +39,7 @@ npm run build
 
 Production build will be in /build, ready to be copied to webserver.
 
-**NB!** Configuration assumes that build will be run froms server toot (nastikjr.awesomeserver.com). If that is not the case refer to [React documentation](https://create-react-app.dev/docs/deployment/#building-for-relative-paths).
+**NB!** Configuration assumes that build will be run froms server root (nastikjr.awesomeserver.com). If that is not the case refer to [React documentation](https://create-react-app.dev/docs/deployment/#building-for-relative-paths).
 
 ## Connecting to API server
 
