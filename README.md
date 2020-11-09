@@ -3,7 +3,7 @@
 Nastikjr-front-reactjs is Nastik Jr frontend.
 Nastik Jr is English-Estonian dictionary, new version of an old [service](https://nastik.palat.ee/) from 2004.
 
-Nastikjr-front-reactjs is written in React and contains only frontend code to retrieve data from API backend. Database and backend written in Java is available here.
+Nastikjr-front-reactjs is written in React and contains only frontend code to retrieve data from API backend. Database and backend written in Java is [available here](https://github.com/aabram/Nastikjr-back-sparkjava).
 
 Demo: http://nastik.eatmorepancakes.com/
 
@@ -34,7 +34,7 @@ to start development server at port 3000. Open http://localhost:3000 to see it w
 To build production version
 
 ```shell
-npm build
+npm run build
 ```
 
 Production build will be in /build, ready to be copied to webserver.
