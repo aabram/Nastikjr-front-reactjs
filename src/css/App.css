@@ -1,0 +1,16 @@
+.mark-dark {
+    background-color: #395765;
+    color: #ececec;
+}
+
+.mark-light {
+    background-color: #e5f4fb;
+}
+
+.link {
+    text-decoration: underline;
+}
+
+.header {
+    border-bottom: 1px cornflowerblue solid;
+}
