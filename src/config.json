@@ -1,3 +1,4 @@
 {
-  "API_URL": "http://eatmorepancakes.com:9090"
+  "API_URL": "http://eatmorepancakes.com:9090/api/",
+  "API_VER": "v1"
 }

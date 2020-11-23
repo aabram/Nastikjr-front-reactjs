@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import Axios from "axios";
 import "../../css/App.css";
 import config from "../../config.json";
@@ -7,7 +7,16 @@ import Notfound from "../Notfound";
 import Loading from "../Loading";
 import Cancelled from "../Cancelled";
 import AppContext from "../../AppContext";
-import {Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, useColorMode,} from "@chakra-ui/core";
+import {
+  Button,
+  Flex,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
+  useColorMode,
+} from "@chakra-ui/core";
 import About from "../About";
 import Exact from "./ResultExact";
 import Partial from "./ResultPartial";
@@ -15,12 +24,13 @@ import Partial from "./ResultPartial";
 function Search() {
   const appContext = useContext(AppContext);
   const APIurl = config.API_URL;
-  const {colorMode} = useColorMode();
+  const API_VER = config.API_VER;
+  const { colorMode } = useColorMode();
   const separator = ": ";
 
-  const exactBgColor = {light: "gray.100", dark: "blue.900"};
-  const exactTextColor = {light: "black", dark: "gray.200"};
-  const markClass = {light: "mark-light", dark: "mark-dark"};
+  const exactBgColor = { light: "gray.100", dark: "blue.900" };
+  const exactTextColor = { light: "black", dark: "gray.200" };
+  const markClass = { light: "mark-light", dark: "mark-dark" };
 
   const [networkError, setNetworkError] = useState(false);
   const [noResults, setNoResults] = useState(false);
@@ -34,14 +44,14 @@ function Search() {
   const langClick = () => {
     setLang(!langEN);
     resetSearch();
-  }
+  };
 
   const resetSearch = () => {
     setExact([]);
     setPartial([]);
     setSearchError(false);
     setLoading(false);
-  }
+  };
 
   const onChangeEN = (e) => setWord(e.target.value);
 
@@ -50,7 +60,7 @@ function Search() {
 
     // Set arrays to empty, otherwise we'll have old results lingering around
     // even if server is down, we deny search or any other error occurs
-    setExact([])
+    setExact([]);
     setPartial([]);
     setNetworkError(false);
 
@@ -67,8 +77,15 @@ function Search() {
   };
 
   const performSearch = () => {
-    const searchExact = Axios.get(APIurl + (langEN ? "/en/" : "/et/") + "exact/" + word);
-    const searchPartial = Axios.get(APIurl + (langEN ? "/en/" : "/et/") + word);
+    const axiosInstance = Axios.create({
+      baseURL: APIurl + API_VER,
+      headers: { "X-frontend-client": "Nastikjr-react" },
+    });
+
+    const searchExact = axiosInstance.get(
+      (langEN ? "/en/" : "/et/") + "exact/" + word
+    );
+    const searchPartial = axiosInstance.get((langEN ? "/en/" : "/et/") + word);
 
     Promise.all([searchExact, searchPartial])
       .then(
@@ -128,10 +145,10 @@ function Search() {
             />
             <InputRightElement
               size="md"
-              children={<Icon name="small-close" color="gray.400"/>}
+              children={<Icon name="small-close" color="gray.400" />}
               mx={2}
               onClick={() => {
-                setWord('');
+                setWord("");
               }}
             />
           </InputGroup>
@@ -142,39 +159,41 @@ function Search() {
             size="sm"
             variantColor="blue"
           >
-            <Icon name="search" mx={1}/>
+            <Icon name="search" mx={1} />
           </Button>
         </Flex>
       </form>
 
-      <About/>
+      <About />
 
-      {loading && <Loading/>}
-      {networkError && <Oops/>}
+      {loading && <Loading />}
+      {networkError && <Oops />}
 
-      {searchError && <Cancelled/>}
-      {noResults && <Notfound/>}
+      {searchError && <Cancelled />}
+      {noResults && <Notfound />}
 
-      {exact.length > 0 &&
-      <Exact
-        exact={exact}
-        separator={separator}
-        exactBgColor={exactBgColor}
-        exactTextColor={exactTextColor}
-        colorMode={colorMode}
-        langEN={langEN}
-      />}
+      {exact.length > 0 && (
+        <Exact
+          exact={exact}
+          separator={separator}
+          exactBgColor={exactBgColor}
+          exactTextColor={exactTextColor}
+          colorMode={colorMode}
+          langEN={langEN}
+        />
+      )}
 
-      {partial.length > 0 &&
-      <Partial
-        partial={partial}
-        word={word}
-        searchError={searchError}
-        separator={separator}
-        markClass={markClass}
-        colorMode={colorMode}
-        langEN={langEN}
-      />}
+      {partial.length > 0 && (
+        <Partial
+          partial={partial}
+          word={word}
+          searchError={searchError}
+          separator={separator}
+          markClass={markClass}
+          colorMode={colorMode}
+          langEN={langEN}
+        />
+      )}
     </>
   );
 }
