@@ -25,7 +25,9 @@ function Search() {
   const appContext = useContext(AppContext);
   const APIurl = config.API_URL;
   const API_VER = config.API_VER;
-  const { colorMode } = useColorMode();
+  const API_Server_404_msg = config.API_server_404_msg;
+  const API_server_network_error = config.API_server_network_error;
+  const {colorMode} = useColorMode();
   const separator = ": ";
 
   const exactBgColor = { light: "gray.100", dark: "blue.900" };
@@ -33,6 +35,7 @@ function Search() {
   const markClass = { light: "mark-light", dark: "mark-dark" };
 
   const [networkError, setNetworkError] = useState(false);
+  const [notFound404, setNotFound404] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [searchError, setSearchError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -58,11 +61,12 @@ function Search() {
   const onSubmitEN = (e) => {
     e.preventDefault();
 
-    // Set arrays to empty, otherwise we'll have old results lingering around
+    // Reset arrays and errors, otherwise we'll have old results lingering around
     // even if server is down, we deny search or any other error occurs
     setExact([]);
     setPartial([]);
     setNetworkError(false);
+    setNotFound404(false);
 
     if (word.length < 3) {
       setSearchError(true);
@@ -82,9 +86,7 @@ function Search() {
       headers: { "X-frontend-client": "Nastikjr-react" },
     });
 
-    const searchExact = axiosInstance.get(
-      (langEN ? "/en/" : "/et/") + "exact/" + word
-    );
+    const searchExact = axiosInstance.get((langEN ? "/en/" : "/et/") + "exact/" + word);
     const searchPartial = axiosInstance.get((langEN ? "/en/" : "/et/") + word);
 
     Promise.all([searchExact, searchPartial])
@@ -106,6 +108,8 @@ function Search() {
         if (errors.response) {
           setLoading(false);
           console.log(errors.response);
+          console.log(errors.response.statusText);
+          setNotFound404(errors.response.status.toString() === "404");
         } else {
           setLoading(false);
           setNetworkError(true);
@@ -166,34 +170,34 @@ function Search() {
 
       <About />
 
-      {loading && <Loading />}
-      {networkError && <Oops />}
+      {notFound404 && <Oops error={API_Server_404_msg}/>}
 
-      {searchError && <Cancelled />}
-      {noResults && <Notfound />}
+      {loading && <Loading/>}
+      {networkError && <Oops error={API_server_network_error}/>}
 
-      {exact.length > 0 && (
-        <Exact
-          exact={exact}
-          separator={separator}
-          exactBgColor={exactBgColor}
-          exactTextColor={exactTextColor}
-          colorMode={colorMode}
-          langEN={langEN}
-        />
-      )}
+      {searchError && <Cancelled/>}
+      {noResults && <Notfound/>}
 
-      {partial.length > 0 && (
-        <Partial
-          partial={partial}
-          word={word}
-          searchError={searchError}
-          separator={separator}
-          markClass={markClass}
-          colorMode={colorMode}
-          langEN={langEN}
-        />
-      )}
+      {exact.length > 0 &&
+      <Exact
+        exact={exact}
+        separator={separator}
+        exactBgColor={exactBgColor}
+        exactTextColor={exactTextColor}
+        colorMode={colorMode}
+        langEN={langEN}
+      />}
+
+      {partial.length > 0 &&
+      <Partial
+        partial={partial}
+        word={word}
+        searchError={searchError}
+        separator={separator}
+        markClass={markClass}
+        colorMode={colorMode}
+        langEN={langEN}
+      />}
     </>
   );
 }
