@@ -1,7 +1,7 @@
 import React from "react";
 import {Text} from "@chakra-ui/core";
 
-function Exact(props) {
+function ResultExact(props) {
   return (
     <>
       {props.exact.map((row) => (
@@ -18,4 +18,4 @@ function Exact(props) {
   );
 }
 
-export default Exact;
+export default ResultExact;

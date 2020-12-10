@@ -1,7 +1,7 @@
 import React from "react";
 import {Box, Text} from "@chakra-ui/core";
 
-function Partial(props) {
+function ResultPartial(props) {
   return (
     <Box p={2} my={2}>
       {props.partial.map((row) => (
@@ -23,4 +23,4 @@ function Partial(props) {
   );
 }
 
-export default Partial;
+export default ResultPartial;
