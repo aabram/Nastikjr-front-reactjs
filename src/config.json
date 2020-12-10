@@ -1,5 +1,5 @@
 {
-  "API_URL": "http://eatmorepancakes.com:9090/api/",
+  "API_URL": "https://eatmorepancakes.com/nastikapi/",
   "API_VER": "v1",
   "API_server_404_msg": "Server arvab, et päringu aadress on vale.",
   "API_server_network_error": "Server ei vasta."
