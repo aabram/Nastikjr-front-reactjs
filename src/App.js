@@ -14,6 +14,7 @@ function App() {
               <Router>
                 <Box margin="auto" p={2} border="0px solid" className="content">
                   <Switch>
+                    <Route path="/:lang/:word" component={Home}/>
                     <Route path="/" component={Home}/>
                   </Switch>
                 </Box>
