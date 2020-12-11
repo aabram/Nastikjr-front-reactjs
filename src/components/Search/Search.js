@@ -1,54 +1,52 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import Axios from "axios";
+import {Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, useColorMode,} from "@chakra-ui/core";
+import AppContext from "../../AppContext";
 import "../../css/App.css";
-import config from "../../config.json";
+import Config from "../../config.json";
 import Oops from "../Oops";
 import Notfound from "../Notfound";
 import Loading from "../Loading";
 import Cancelled from "../Cancelled";
-import AppContext from "../../AppContext";
-import {
-  Button,
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightElement,
-  useColorMode,
-} from "@chakra-ui/core";
 import About from "../About";
-import Exact from "./ResultExact";
-import Partial from "./ResultPartial";
+import ResultExact from "./ResultExact";
+import ResultPartial from "./ResultPartial";
 
-function Search() {
+function Search(props) {
+  const history = useHistory();
   const appContext = useContext(AppContext);
-  const APIurl = config.API_URL;
-  const API_VER = config.API_VER;
-  const API_Server_404_msg = config.API_server_404_msg;
-  const API_server_network_error = config.API_server_network_error;
   const {colorMode} = useColorMode();
+  const API_URL = Config.API_URL;
+  const API_VER = Config.API_VER;
+  const API_Server_404_msg = Config.API_server_404_msg;
+  const API_server_network_error = Config.API_server_network_error;
   const separator = ": ";
 
-  const exactBgColor = { light: "gray.100", dark: "blue.900" };
-  const exactTextColor = { light: "black", dark: "gray.200" };
-  const markClass = { light: "mark-light", dark: "mark-dark" };
+  const exactBgColor = {light: "gray.100", dark: "blue.900"};
+  const exactTextColor = {light: "black", dark: "gray.200"};
+  const markClass = {light: "mark-light", dark: "mark-dark"};
 
+  const [word, setWord] = useState(props.word);
+  const [lang, setLang] = useState(props.lang);
   const [networkError, setNetworkError] = useState(false);
   const [notFound404, setNotFound404] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [searchError, setSearchError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [word, setWord] = useState("");
   const [partial, setPartial] = useState([]);
   const [exact, setExact] = useState([]);
-  const [langEN, setLang] = useState(true);
 
+  // We want to know if page is loaded from link/url or not
+  const fromLink = (props.lang && props.word);
+
+  // On search direction change
   const langClick = () => {
-    setLang(!langEN);
+    setLang(lang === 'en' ? 'et' : 'en');
     resetSearch();
   };
 
+  // Reset fields and values to start with empty page
   const resetSearch = () => {
     setExact([]);
     setPartial([]);
@@ -56,10 +54,13 @@ function Search() {
     setLoading(false);
   };
 
+  // On form input field change
   const onChangeEN = (e) => setWord(e.target.value);
 
+  // On form submit
   const onSubmitEN = (e) => {
     e.preventDefault();
+    appContext.toggleAbout(false);
 
     // Reset arrays and errors, otherwise we'll have old results lingering around
     // even if server is down, we deny search or any other error occurs
@@ -68,6 +69,11 @@ function Search() {
     setNetworkError(false);
     setNotFound404(false);
 
+      preflight();
+  };
+
+  // Conditions for accepting or denying search
+  const preflight = () => {
     if (word.length < 3) {
       setSearchError(true);
       setLoading(false);
@@ -76,32 +82,31 @@ function Search() {
       setSearchError(false);
       performSearch();
     }
+  }
 
-    appContext.toggleAbout(false);
-  };
-
+  // Search with provided lang and word
+  // We should get to this point only if all conditions are met:
+  // lang, word are set and minlength has been enforced
   const performSearch = () => {
     const axiosInstance = Axios.create({
-      baseURL: APIurl + API_VER,
-      headers: { "X-frontend-client": "Nastikjr-react" },
+      baseURL: API_URL + API_VER,
+      headers: {"X-frontend-client": "Nastikjr-react"},
     });
-
-    const searchExact = axiosInstance.get((langEN ? "/en/" : "/et/") + "exact/" + word);
-    const searchPartial = axiosInstance.get((langEN ? "/en/" : "/et/") + word);
+    const searchExact = axiosInstance.get(lang + "/exact/" + word);
+    const searchPartial = axiosInstance.get(lang + "/" + word);
 
     Promise.all([searchExact, searchPartial])
       .then(
         Axios.spread((...responses) => {
           setExact(responses[0].data);
           setPartial(responses[1].data);
+          setLoading(false);
 
           if (responses[0].data.length > 0 || responses[1].data.length > 0) {
             setNoResults(false);
           } else {
             setNoResults(true);
           }
-
-          setLoading(false);
         })
       )
       .catch((errors) => {
@@ -113,10 +118,26 @@ function Search() {
         } else {
           setLoading(false);
           setNetworkError(true);
-          console.log("No connection to " + APIurl);
+          console.log("No connection to " + API_URL);
         }
       });
+    updateURL();
   };
+
+  // Update URL in browser to enable linking to specific search
+  const updateURL = () => {
+    let newURL = "/" + lang + "/" + word;
+    history.push(newURL);
+  }
+
+  // On component load check if we come here from link (eg http://.../en/cat)
+  // if yes then do preflight (and search) immediately
+  useEffect(() => {
+    if (fromLink) {
+      preflight();
+    }
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
@@ -124,7 +145,7 @@ function Search() {
         <Flex justifyContent="flex-start" py={2} border="0px solid">
           <InputGroup w="100%" size="sm">
             <InputLeftAddon
-              children={langEN ? "EN" : "ET"}
+              children={lang.toUpperCase()}
               borderRightRadius="0"
               borderBottomColor="#aaa"
               borderLeftColor="#aaa"
@@ -149,7 +170,7 @@ function Search() {
             />
             <InputRightElement
               size="md"
-              children={<Icon name="small-close" color="gray.400" />}
+              children={<Icon name="small-close" color="gray.400"/>}
               mx={2}
               onClick={() => {
                 setWord("");
@@ -163,12 +184,12 @@ function Search() {
             size="sm"
             variantColor="blue"
           >
-            <Icon name="search" mx={1} />
+            <Icon name="search" mx={1}/>
           </Button>
         </Flex>
       </form>
 
-      <About />
+      <About/>
 
       {notFound404 && <Oops error={API_Server_404_msg}/>}
 
@@ -178,25 +199,23 @@ function Search() {
       {searchError && <Cancelled/>}
       {noResults && <Notfound/>}
 
-      {exact.length > 0 &&
-      <Exact
+      {exact.length > 0 && <ResultExact
         exact={exact}
         separator={separator}
         exactBgColor={exactBgColor}
         exactTextColor={exactTextColor}
         colorMode={colorMode}
-        langEN={langEN}
+        lang={lang}
       />}
 
-      {partial.length > 0 &&
-      <Partial
+      {partial.length > 0 && <ResultPartial
         partial={partial}
         word={word}
         searchError={searchError}
         separator={separator}
         markClass={markClass}
         colorMode={colorMode}
-        langEN={langEN}
+        lang={lang}
       />}
     </>
   );

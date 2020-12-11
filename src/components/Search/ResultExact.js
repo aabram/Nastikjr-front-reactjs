@@ -9,9 +9,9 @@ function ResultExact(props) {
               bg={props.exactBgColor[props.colorMode]}
               color={props.exactTextColor[props.colorMode]}>
           <span title={"ID: " + row.id}>
-            <strong className="exactMatch">{props.langEN ? row.en : row.et}</strong>{props.separator}
+            <strong className="exactMatch">{props.lang === 'en' ? row.en : row.et}</strong>{props.separator}
           </span>
-          <span>{props.langEN ? row.et : row.en}</span>
+          <span>{props.lang === 'en' ? row.et : row.en}</span>
         </Text>
       ))}
     </>

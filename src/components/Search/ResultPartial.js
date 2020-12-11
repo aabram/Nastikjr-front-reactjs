@@ -9,14 +9,14 @@ function ResultPartial(props) {
           <span title={"ID: " + row.id}>
             <strong
               dangerouslySetInnerHTML={{
-                __html: (props.langEN ? row.en : row.et).replace(
+                __html: (props.lang === 'en' ? row.en : row.et).replace(
                   new RegExp(props.word, "gi"),
                   (match) => `<mark class="${props.markClass[props.colorMode]}">${match}</mark>`
                 ),
               }}
             ></strong>
           </span>
-          {props.separator} <span>{props.langEN ? row.et : row.en}</span>
+          {props.separator} <span>{props.lang === 'en' ? row.et : row.en}</span>
         </Text>
       ))}
     </Box>
