@@ -125,6 +125,8 @@ function Search(props) {
   };
 
   // Update URL in browser to enable linking to specific search
+  // This will work OOB with npm start, but for use with webserver
+  // we need to enable rewrite and redirect support.
   const updateURL = () => {
     let newURL = "/" + lang + "/" + word;
     history.push(newURL);
