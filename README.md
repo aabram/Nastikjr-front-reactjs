@@ -7,7 +7,9 @@ Nastikjr-front-reactjs is written in React and contains only frontend code to re
 
 Demo: http://nastik.eatmorepancakes.com/
 
-There is light mode![Light mode](README.assets/nastikjr_light.png)
+There is light mode
+
+![Light mode](README.assets/nastikjr_light.png)
 
 ... and dark mode
 
