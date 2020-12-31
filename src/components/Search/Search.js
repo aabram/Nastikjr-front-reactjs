@@ -33,7 +33,7 @@ function Search(props) {
   const [notFound404, setNotFound404] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [searchError, setSearchError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [partial, setPartial] = useState([]);
   const [exact, setExact] = useState([]);
 
@@ -51,7 +51,7 @@ function Search(props) {
     setExact([]);
     setPartial([]);
     setSearchError(false);
-    setLoading(false);
+    // setLoading(false);
   };
 
   // On form input field change
@@ -76,9 +76,9 @@ function Search(props) {
   const preflight = () => {
     if (word.length < 3) {
       setSearchError(true);
-      setLoading(false);
+      // setLoading(false);
     } else {
-      setLoading(true);
+      // setLoading(false);
       setSearchError(false);
       performSearch();
     }
@@ -100,7 +100,7 @@ function Search(props) {
         Axios.spread((...responses) => {
           setExact(responses[0].data);
           setPartial(responses[1].data);
-          setLoading(false);
+          // setLoading(false);
 
           if (responses[0].data.length > 0 || responses[1].data.length > 0) {
             setNoResults(false);
@@ -111,12 +111,12 @@ function Search(props) {
       )
       .catch((errors) => {
         if (errors.response) {
-          setLoading(false);
+          // setLoading(false);
           console.log(errors.response);
           console.log(errors.response.statusText);
           setNotFound404(errors.response.status.toString() === "404");
         } else {
-          setLoading(false);
+          // setLoading(false);
           setNetworkError(true);
           console.log("No connection to " + API_URL);
         }
@@ -195,7 +195,7 @@ function Search(props) {
 
       {notFound404 && <Oops error={API_Server_404_msg}/>}
 
-      {loading && <Loading/>}
+      {/* {loading && <Loading/>} */}
       {networkError && <Oops error={API_server_network_error}/>}
 
       {searchError && <Cancelled/>}
