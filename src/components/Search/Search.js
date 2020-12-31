@@ -7,7 +7,7 @@ import "../../css/App.css";
 import Config from "../../config.json";
 import Oops from "../Oops";
 import Notfound from "../Notfound";
-import Loading from "../Loading";
+// import Loading from "../Loading";
 import Cancelled from "../Cancelled";
 import About from "../About";
 import ResultExact from "./ResultExact";
