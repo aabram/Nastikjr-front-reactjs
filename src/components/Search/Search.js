@@ -70,7 +70,7 @@ function Search(props) {
     setNetworkError(false);
     setNotFound404(false);
 
-      preflight();
+    preflight();
   };
 
   // Conditions for accepting or denying search
