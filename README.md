@@ -15,7 +15,7 @@ There is light mode
 
 ![Light mode](README.assets/nastikjr_dark.png)
 
-and it behaves in mobile too.
+and it behaves on mobile too.
 
 
 ## Installing
@@ -41,7 +41,7 @@ npm run build
 
 Production build will be in /build, ready to be copied to webserver.
 
-**NB!** Configuration assumes that build will be run froms server root (nastikjr.awesomeserver.com). If that is not the case refer to [React documentation](https://create-react-app.dev/docs/deployment/#building-for-relative-paths).
+**NB!** Configuration assumes that build will be run from server root (nastikjr.awesomeserver.com). If that is not the case refer to [React documentation](https://create-react-app.dev/docs/deployment/#building-for-relative-paths).
 
 ## Connecting to API server
 
