@@ -5,13 +5,14 @@ import {Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement
 import AppContext from "../../AppContext";
 import "../../css/App.css";
 import Config from "../../config.json";
-import Oops from "../Oops";
-import Notfound from "../Notfound";
+import Oops from "../Notices/Oops";
+import Notfound from "../Notices/Notfound";
 // import Loading from "../Loading";
-import Cancelled from "../Cancelled";
+import Cancelled from "../Notices/Cancelled";
 import About from "../About";
 import ResultExact from "./ResultExact";
 import ResultPartial from "./ResultPartial";
+import * as PropTypes from "prop-types";
 
 function Search(props) {
   const history = useHistory();
@@ -224,3 +225,8 @@ function Search(props) {
 }
 
 export default Search;
+
+Search.propTypes = {
+  lang: PropTypes.string.isRequired,
+  word: PropTypes.string.isRequired
+}
