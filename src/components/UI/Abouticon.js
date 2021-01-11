@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {IconButton} from "@chakra-ui/core";
-import AppContext from "../AppContext";
+import AppContext from "../../AppContext";
 
 function Abouticon() {
   const appContext = useContext(AppContext);
