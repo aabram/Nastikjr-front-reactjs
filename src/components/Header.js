@@ -1,7 +1,7 @@
 import React from "react";
 import {Box, Flex, Heading, Text} from "@chakra-ui/core";
-import Themeicon from "./Themeicon";
-import Abouticon from "./Abouticon";
+import Themeicon from "./UI/Themeicon";
+import Abouticon from "./UI/Abouticon";
 
 function Header() {
   return (
