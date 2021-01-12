@@ -29,5 +29,5 @@ function Home({match}) {
 export default Home;
 
 Home.propTypes = {
-  match: PropTypes.string.isRequired
+  match: PropTypes.object.isRequired
 }
