@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Box, Flex, Heading, Text} from "@chakra-ui/core";
+import AppContext from "../AppContext";
 import Themeicon from "./UI/Themeicon";
 import Abouticon from "./UI/Abouticon";
 
 function Header() {
+  const appContext = useContext(AppContext);
+  let description = appContext.headerTextDirectionENET ? "Inglise → eesti sõnastik" : "Eesti → inglise sõnastik";
+
   return (
     <>
       <Box>
@@ -17,7 +21,7 @@ function Header() {
           </Box>
         </Flex>
         <Flex justifyContent="flex-start" px={2} paddingBottom={1}>
-          <Text fontSize="md">Inglise ↔ eesti sõnastik</Text>
+          <Text fontSize="md">{description}</Text>
         </Flex>
       </Box>
     </>

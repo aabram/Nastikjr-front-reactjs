@@ -44,6 +44,7 @@ function Search(props) {
   // On search direction change
   const langClick = () => {
     setLang(lang === 'en' ? 'et' : 'en');
+    appContext.toggleHeaderTextDirectionENET(!appContext.headerTextDirectionENET);
     resetSearch();
   };
 
