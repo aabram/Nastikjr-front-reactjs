@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Axios from "axios";
-import {Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, useColorMode,} from "@chakra-ui/core";
+import { Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, useColorMode } from "@chakra-ui/core";
 import AppContext from "../../AppContext";
 import "../../css/App.css";
 import Config from "../../config.json";
@@ -70,6 +70,7 @@ function Search(props) {
     setPartial([]);
     setNetworkError(false);
     setNotFound404(false);
+    setNoResults(false);
 
     preflight();
   };
@@ -104,9 +105,7 @@ function Search(props) {
           setPartial(responses[1].data);
           // setLoading(false);
 
-          if (responses[0].data.length > 0 || responses[1].data.length > 0) {
-            setNoResults(false);
-          } else {
+          if (!responses[0].data.length > 0 && !responses[1].data.length > 0) {
             setNoResults(true);
           }
         })
@@ -174,7 +173,7 @@ function Search(props) {
             />
             <InputRightElement
               size="md"
-              children={<Icon name="small-close" color="gray.400"/>}
+              children={<Icon name="small-close" color="gray.400" />}
               mx={2}
               onClick={() => {
                 setWord("");
@@ -188,39 +187,43 @@ function Search(props) {
             size="sm"
             variantColor="blue"
           >
-            <Icon name="search" mx={1}/>
+            <Icon name="search" mx={1} />
           </Button>
         </Flex>
       </form>
 
-      <About/>
+      <About />
 
-      {notFound404 && <Oops error={API_Server_404_msg}/>}
+      {notFound404 && <Oops error={API_Server_404_msg} />}
 
       {/* {loading && <Loading/>} */}
-      {networkError && <Oops error={API_server_network_error}/>}
+      {networkError && <Oops error={API_server_network_error} />}
 
-      {searchError && <Cancelled/>}
-      {noResults && <Notfound/>}
+      {searchError && <Cancelled />}
+      {noResults && <Notfound />}
 
-      {exact.length > 0 && <ResultExact
-        exact={exact}
-        separator={separator}
-        exactBgColor={exactBgColor}
-        exactTextColor={exactTextColor}
-        colorMode={colorMode}
-        lang={lang}
-      />}
+      {exact.length > 0 &&
+        <ResultExact
+          exact={exact}
+          separator={separator}
+          exactBgColor={exactBgColor}
+          exactTextColor={exactTextColor}
+          colorMode={colorMode}
+          lang={lang}
+        />
+      }
 
-      {partial.length > 0 && <ResultPartial
-        partial={partial}
-        word={word}
-        searchError={searchError}
-        separator={separator}
-        markClass={markClass}
-        colorMode={colorMode}
-        lang={lang}
-      />}
+      {partial.length > 0 &&
+        <ResultPartial
+          partial={partial}
+          word={word}
+          searchError={searchError}
+          separator={separator}
+          markClass={markClass}
+          colorMode={colorMode}
+          lang={lang}
+        />
+      }
     </>
   );
 }
