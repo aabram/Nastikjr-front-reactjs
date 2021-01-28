@@ -1,5 +1,6 @@
 import React from "react";
-import {Box, Text} from "@chakra-ui/core";
+import { Box, Text } from "@chakra-ui/core";
+import { string, array, object } from "prop-types";
 
 function ResultPartial(props) {
   return (
@@ -9,14 +10,17 @@ function ResultPartial(props) {
           <span title={"ID: " + row.id}>
             <strong
               dangerouslySetInnerHTML={{
-                __html: (props.lang === 'en' ? row.en : row.et).replace(
+                __html: (props.lang === "en" ? row.en : row.et).replace(
                   new RegExp(props.word, "gi"),
-                  (match) => `<mark class="${props.markClass[props.colorMode]}">${match}</mark>`
+                  (match) =>
+                    `<mark class="${
+                      props.markClass[props.colorMode]
+                    }">${match}</mark>`
                 ),
               }}
             ></strong>
           </span>
-          {props.separator} <span>{props.lang === 'en' ? row.et : row.en}</span>
+          {props.separator} <span>{props.lang === "en" ? row.et : row.en}</span>
         </Text>
       ))}
     </Box>
@@ -24,3 +28,12 @@ function ResultPartial(props) {
 }
 
 export default ResultPartial;
+
+ResultPartial.propTypes = {
+  colorMode: string.isRequired,
+  lang: string.isRequired,
+  markClass: object.isRequired,
+  partial: array.isRequired,
+  separator: string.isRequired,
+  word: string.isRequired,
+};
