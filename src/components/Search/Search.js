@@ -1,7 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
-import { Button, Flex, Icon, Input, InputGroup, InputLeftAddon, InputRightElement, useColorMode } from "@chakra-ui/core";
+import {
+  Button,
+  Flex,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
+  useColorMode,
+} from "@chakra-ui/core";
 import AppContext from "../../AppContext";
 import "../../css/App.css";
 import Config from "../../config.json";
@@ -12,21 +21,28 @@ import Cancelled from "../Notices/Cancelled";
 import About from "../About";
 import ResultExact from "./ResultExact";
 import ResultPartial from "./ResultPartial";
-import * as PropTypes from "prop-types";
+import { string } from "prop-types";
+
+/*
+Loading animation is disabled throughout the file. Turns out that loading the
+loading animation and displaying it takes more time than just for the results to arrive
+so with loading display it took more time for the user to see the results than without.
+It would make sense to enable loading text+animation only after certain elapsed time.
+*/
 
 function Search(props) {
   const history = useHistory();
   const appContext = useContext(AppContext);
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
   const API_URL = Config.API_URL;
   const API_VER = Config.API_VER;
   const API_Server_404_msg = Config.API_server_404_msg;
   const API_server_network_error = Config.API_server_network_error;
   const separator = ": ";
 
-  const exactBgColor = {light: "gray.100", dark: "blue.900"};
-  const exactTextColor = {light: "black", dark: "gray.200"};
-  const markClass = {light: "mark-light", dark: "mark-dark"};
+  const exactBgColor = { light: "gray.100", dark: "blue.900" };
+  const exactTextColor = { light: "black", dark: "gray.200" };
+  const markClass = { light: "mark-light", dark: "mark-dark" };
 
   const [word, setWord] = useState(props.word);
   const [lang, setLang] = useState(props.lang);
@@ -39,12 +55,14 @@ function Search(props) {
   const [exact, setExact] = useState([]);
 
   // We want to know if page is loaded from link/url or not
-  const fromLink = (props.lang && props.word);
+  const fromLink = props.lang && props.word;
 
   // On search direction change
   const langClick = () => {
-    setLang(lang === 'en' ? 'et' : 'en');
-    appContext.toggleHeaderTextDirectionENET(!appContext.headerTextDirectionENET);
+    setLang(lang === "en" ? "et" : "en");
+    appContext.toggleHeaderTextDirectionENET(
+      !appContext.headerTextDirectionENET
+    );
     resetSearch();
   };
 
@@ -85,7 +103,7 @@ function Search(props) {
       setSearchError(false);
       performSearch();
     }
-  }
+  };
 
   // Search with provided lang and word
   // We should get to this point only if all conditions are met:
@@ -93,7 +111,7 @@ function Search(props) {
   const performSearch = () => {
     const axiosInstance = Axios.create({
       baseURL: API_URL + API_VER,
-      headers: {"X-frontend-client": "Nastikjr-react"},
+      headers: { "X-frontend-client": "Nastikjr-react" },
     });
     const searchExact = axiosInstance.get(lang + "/exact/" + word);
     const searchPartial = axiosInstance.get(lang + "/" + word);
@@ -131,7 +149,7 @@ function Search(props) {
   const updateURL = () => {
     let newURL = "/" + lang + "/" + word;
     history.push(newURL);
-  }
+  };
 
   // On component load check if we come here from link (eg http://.../en/cat)
   // if yes then do preflight (and search) immediately
@@ -200,9 +218,9 @@ function Search(props) {
       {networkError && <Oops error={API_server_network_error} />}
 
       {searchError && <Cancelled />}
-      {noResults && <Notfound />}
+      {noResults && <Notfound lang={lang} word={word} />}
 
-      {exact.length > 0 &&
+      {exact.length > 0 && (
         <ResultExact
           exact={exact}
           separator={separator}
@@ -211,19 +229,18 @@ function Search(props) {
           colorMode={colorMode}
           lang={lang}
         />
-      }
+      )}
 
-      {partial.length > 0 &&
+      {partial.length > 0 && (
         <ResultPartial
           partial={partial}
           word={word}
-          searchError={searchError}
           separator={separator}
           markClass={markClass}
           colorMode={colorMode}
           lang={lang}
         />
-      }
+      )}
     </>
   );
 }
@@ -231,6 +248,6 @@ function Search(props) {
 export default Search;
 
 Search.propTypes = {
-  lang: PropTypes.string.isRequired,
-  word: PropTypes.string.isRequired
-}
+  lang: string.isRequired,
+  word: string.isRequired,
+};
