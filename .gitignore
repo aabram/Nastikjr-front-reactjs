@@ -24,4 +24,6 @@ yarn-error.log*
 
 # Intellij IDEA
 .idea/
+
+# WinMerge et al misc tools
 *.bak
