@@ -10,3 +10,27 @@
 .link {
     text-decoration: underline;
 }
+
+input[type=text].glowBlue {
+    box-shadow: 0 0 10px rgb(121, 194, 223);
+}
+
+input[type=text]:focus.glowBlue {
+    box-shadow: 0 0 10px rgb(121, 194, 223);
+}
+
+input[type=text].glowRed {
+    box-shadow: 0 0 10px rgb(223, 121, 138);
+}
+
+input[type=text].glowRed:focus {
+    box-shadow: 0 0 10px rgb(223, 121, 138);
+}
+
+input[type=text].glowGreen {
+    box-shadow: 0 0 10px rgb(129, 204, 139);
+}
+
+input[type=text].glowGreen:focus {
+    box-shadow: 0 0 10px rgb(129, 204, 139);
+}

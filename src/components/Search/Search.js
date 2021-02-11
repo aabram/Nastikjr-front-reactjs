@@ -53,6 +53,7 @@ function Search(props) {
   // const [loading, setLoading] = useState(false);
   const [partial, setPartial] = useState([]);
   const [exact, setExact] = useState([]);
+  const [glowEffect, setGlowEffect] = useState([""]);
 
   // We want to know if page is loaded from link/url or not
   const fromLink = props.lang && props.word;
@@ -71,6 +72,7 @@ function Search(props) {
     setExact([]);
     setPartial([]);
     setSearchError(false);
+    setGlowEffect("");
     // setLoading(false);
   };
 
@@ -121,10 +123,12 @@ function Search(props) {
         Axios.spread((...responses) => {
           setExact(responses[0].data);
           setPartial(responses[1].data);
+          setGlowEffect("glowGreen");
           // setLoading(false);
 
           if (!responses[0].data.length > 0 && !responses[1].data.length > 0) {
             setNoResults(true);
+            setGlowEffect("glowRed");
           }
         })
       )
@@ -163,7 +167,7 @@ function Search(props) {
   return (
     <>
       <form name="searchbox" onSubmit={onSubmitEN}>
-        <Flex justifyContent="flex-start" py={2} border="0px solid">
+        <Flex justifyContent="flex-start" py={2}>
           <InputGroup w="100%" size="sm">
             <InputLeftAddon
               children={lang.toUpperCase()}
@@ -175,6 +179,7 @@ function Search(props) {
               cursor="pointer"
             />
             <Input
+              type="text"
               name="word"
               autoFocus
               variant="outline"
@@ -188,6 +193,7 @@ function Search(props) {
               onChange={onChangeEN}
               mr={2}
               px={2}
+              className={glowEffect}
             />
             <InputRightElement
               size="md"
@@ -195,6 +201,7 @@ function Search(props) {
               mx={2}
               onClick={() => {
                 setWord("");
+                setGlowEffect("")
               }}
             />
           </InputGroup>
