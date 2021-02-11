@@ -14,7 +14,7 @@ function Header() {
     <Box>
       <Flex justifyContent="space-between" px={2}>
         <Heading as="h1" size="md" pt={2}>
-          Nastik jr
+          <a href="/">Nastik jr</a>
         </Heading>
         <Box>
           <Abouticon />
